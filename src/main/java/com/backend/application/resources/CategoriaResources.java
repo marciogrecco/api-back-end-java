@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.application.domain.Categoria;
-import com.backend.application.domain.services.CategoriaServices;
+import com.backend.application.domain.services.CategoriaService;
+
 
 @RestController
-@RequestMapping(value = "/categoria")
+@RequestMapping(value = "/categorias")
 public class CategoriaResources {
 
 	@Autowired
-	private CategoriaServices services;
+	private CategoriaService services;
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Optional<Categoria>> listar(@PathVariable Integer id) {
 
-		Optional<Categoria> obj = services.find(id);
+		Optional<Categoria> obj = Optional.ofNullable(services.find(id));
 		return ResponseEntity.ok().body(obj);
 	}
 
