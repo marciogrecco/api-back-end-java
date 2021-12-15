@@ -21,6 +21,7 @@ import com.backend.application.domain.Pedido;
 import com.backend.application.domain.Produto;
 import com.backend.application.domain.enun.EstadoPagamento;
 import com.backend.application.domain.enun.TipoCliente;
+import com.backend.application.domain.repository.CategoriaRepository;
 import com.backend.application.domain.repository.CidadeRepository;
 import com.backend.application.domain.repository.ClienteRepository;
 import com.backend.application.domain.repository.EnderecoRepository;
@@ -29,7 +30,6 @@ import com.backend.application.domain.repository.ItemPedidoRepository;
 import com.backend.application.domain.repository.PagamentoRepository;
 import com.backend.application.domain.repository.PedidoRepository;
 import com.backend.application.domain.repository.ProdutoRepository;
-
 @SpringBootApplication
 public class ApiBackendJavaApplication implements CommandLineRunner {
 
@@ -48,11 +48,16 @@ public class ApiBackendJavaApplication implements CommandLineRunner {
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
 
-	@Autowired
-	private ItemPedidoRepository itemRepo;
 
 	@Autowired
 	private ProdutoRepository produtoRepo;
+	
+	@Autowired
+	private ItemPedidoRepository itemRepo;
+
+	
+	@Autowired
+	private CategoriaRepository categoriaRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiBackendJavaApplication.class, args);
@@ -73,6 +78,10 @@ public class ApiBackendJavaApplication implements CommandLineRunner {
 		Cidade c1 = new Cidade(null, "Uberlândia", est1);
 		Cidade c2 = new Cidade(null, "São Paulo", est2);
 		Cidade c3 = new Cidade(null, "Campinas", est2);
+
+		cat1.getProdutos().addAll(Arrays.asList(p1, p2));
+		cat2.getProdutos().addAll(Arrays.asList(p2));
+		
 
 		est1.getCidades().addAll(Arrays.asList(c1));
 		est2.getCidades().addAll(Arrays.asList(c2, c3));
@@ -106,13 +115,14 @@ public class ApiBackendJavaApplication implements CommandLineRunner {
 
 		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
 
-		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
-		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
-
+		
+		
 		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
 		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
 		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
 
+		//itemRepo.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
 		ped1.getItens().addAll(Arrays.asList(ip1, ip2));
 		ped2.getItens().addAll(Arrays.asList(ip3));
 
@@ -120,7 +130,11 @@ public class ApiBackendJavaApplication implements CommandLineRunner {
 		p2.getItens().addAll(Arrays.asList(ip3));
 		p3.getItens().addAll(Arrays.asList(ip2));
 
-		// itemRepo.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
+
+		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		categoriaRepo.saveAll(Arrays.asList(cat1,cat2));
 	}
 
 }
