@@ -1,8 +1,12 @@
 package com.backend.application.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,46 +15,39 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Date instantDate;
-
-	@ManyToOne
-	private Cliente cliente;
+	private Date instante;
 
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "pedido")
 	private Pagamento pagamento;
+	@ManyToOne
+	@JoinColumn(name = "cliente_id")
+	private Cliente cliente;
 
 	@ManyToOne
 	@JoinColumn(name = "endereco_de_entrega_id")
 	private Endereco enderecoDeEntrega;
 
-	public Pedido() {
+	@OneToMany(mappedBy = "id.pedido")
+	private List<ItemPedido> itens = new ArrayList<>();
 
+	public Pedido() {
 	}
 
-	public Pedido(Integer id, Date instantDate, Cliente cliente, Endereco enderecoDeEntrega) {
+	public Pedido(Integer id, Date instante, Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
 		this.id = id;
-		this.instantDate = instantDate;
-		this.enderecoDeEntrega = enderecoDeEntrega;
+		this.instante = instante;
 		this.cliente = cliente;
-
-	}
-
-	public void setPagamento(Pagamento pagamento) {
-		this.pagamento = pagamento;
-	}
-
-	public Pagamento getPagamento() {
-		return pagamento;
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
 	public Integer getId() {
@@ -61,20 +58,44 @@ public class Pedido implements Serializable {
 		this.id = id;
 	}
 
-	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
-		this.enderecoDeEntrega = enderecoDeEntrega;
+	public Date getInstante() {
+		return instante;
+	}
+
+	public void setInstante(Date instante) {
+		this.instante = instante;
+	}
+
+	public Pagamento getPagamento() {
+		return pagamento;
+	}
+
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
 
 	public Endereco getEnderecoDeEntrega() {
 		return enderecoDeEntrega;
 	}
 
-	public Date getInstantDate() {
-		return instantDate;
+	public void setEnderecoDeEntrega(Endereco enderecoDeEntrega) {
+		this.enderecoDeEntrega = enderecoDeEntrega;
 	}
 
-	public void setInstantDate(Date instantDate) {
-		this.instantDate = instantDate;
+	public void setItens(List<ItemPedido> itens) {
+		this.itens = itens;
+	}
+
+	public List<ItemPedido> getItens() {
+		return itens;
 	}
 
 	@Override
@@ -94,4 +115,5 @@ public class Pedido implements Serializable {
 		return Objects.equals(id, other.id);
 	}
 
+	
 }
