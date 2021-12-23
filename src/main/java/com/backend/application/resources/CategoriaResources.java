@@ -27,8 +27,7 @@ public class CategoriaResources {
 		Optional<Object> obj = Optional.ofNullable(services.findALL());
 		return ResponseEntity.ok().body(obj);
 	}
-	
-	
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 		Optional<Categoria> obj = Optional.ofNullable(services.find(id));
@@ -42,10 +41,17 @@ public class CategoriaResources {
 		return ResponseEntity.created(uri).build();
 	}
 
-	@RequestMapping(value="/{id}", method=RequestMethod.PUT)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id) {
 		obj.setId(id);
 		obj = services.update(obj);
 		return ResponseEntity.noContent().build();
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		services.delete(id);
+		return ResponseEntity.noContent().build();
+
 	}
 }
