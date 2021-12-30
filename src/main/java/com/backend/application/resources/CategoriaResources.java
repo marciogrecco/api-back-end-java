@@ -1,7 +1,9 @@
 package com.backend.application.resources;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.backend.application.domain.Categoria;
+import com.backend.application.domain.dto.CategoriaDTO;
 import com.backend.application.domain.services.CategoriaService;
 
 @RestController
@@ -22,11 +25,15 @@ public class CategoriaResources {
 	@Autowired
 	private CategoriaService services;
 
-	@RequestMapping("/")
-	public ResponseEntity<?> findALL() {
-		Optional<Object> obj = Optional.ofNullable(services.findALL());
-		return ResponseEntity.ok().body(obj);
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public ResponseEntity<List<CategoriaDTO>> findAll() {
+		List<Categoria> list = services.findALL();
+		List<CategoriaDTO> listDto = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());  
+		return ResponseEntity.ok().body(listDto);
 	}
+
+	
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
@@ -53,5 +60,8 @@ public class CategoriaResources {
 		services.delete(id);
 		return ResponseEntity.noContent().build();
 
-	}
+	
+
+}
+
 }

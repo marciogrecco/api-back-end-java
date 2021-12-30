@@ -102,6 +102,7 @@ public class Pedido implements Serializable {
 
 	public List<ItemPedido> getItens() {
 		return itens;
+
 	}
 
 	@Override

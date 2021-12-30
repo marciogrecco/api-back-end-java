@@ -19,7 +19,7 @@ public class CategoriaService {
 	private CategoriaRepository repo;
 
 	// metodo busca todas categorias
-	public Object findALL() {
+	public List<Categoria> findALL() {
 		List<Categoria> objeto = repo.findAll();
 		return objeto;
 	}
